@@ -1,0 +1,36 @@
+.notice-message {
+    width: 48%;
+    margin: 240px auto 62px;
+    font-weight: bold;
+    font-size: 24px;
+    text-align: center;
+}
+
+.verify-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 17%;
+    height: 69px;
+    background-color: #d9d9d9;
+    border: 1px solid #000000;
+    border-radius: 10px;
+    margin: 0 auto;
+}
+
+.verify-link {
+    text-decoration: none;
+    color: #000000;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.resend-button {
+    background-color: #ffffff;
+    border: none;
+    font-size: 20px;
+    color: #0073cc;
+    width: 17%;
+    margin: 52px auto;
+    display: block;
+}

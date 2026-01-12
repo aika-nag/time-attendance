@@ -1,0 +1,46 @@
+.header {
+    height: 80px;
+    background-color: #000000;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 46px 0 25px;
+}
+
+.header-logo {
+    width: 370px;
+}
+
+.toggle-menu-button {
+    display: none;
+}
+
+.nav-item {
+    display: flex;
+    gap: 41px;
+}
+
+.logout-button {
+    background-color: #000000;
+    border: none;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.error {
+    color: #ff0000;
+}
+
+.page-link {
+    margin-top: 17px;
+    text-decoration: none;
+    font-size: 20px;
+    color: #0073cc;
+    display: block;
+    text-align: center;
+}
