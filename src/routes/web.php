@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\BreakTimeController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -19,6 +20,10 @@ use Illuminate\Http\Request;
 //一般ユーザー用ルート
 Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/', [AttendanceController::class, 'index']);
+    Route::post('/attendance/begin', [AttendanceController::class, 'store']);
+    Route::post('/attendance/finish', [AttendanceController::class, 'endDay']);
+    Route::post('/attendance/break-begin', [BreakTimeController::class, 'store']);
+    Route::post('/attendance/break-finish', [BreakTimeController::class, 'endBreakTime']);
 });
 
 Route::get('/email/verify', function () {

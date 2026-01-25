@@ -33,3 +33,9 @@
     font-size: 26px;
     font-weight: bold;
 }
+
+@media (max-width: 609px) {
+    .form {
+        width: 80%;
+    }
+}

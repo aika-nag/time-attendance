@@ -9,8 +9,9 @@
 @section('content')
 
 @include('components.simple-header')
-<p class="notice-message">登録していただいたメールアドレスに認証メールを送付しました。<br />
-メール認証を完了してください。</p>
+<p class="notice-message">
+    <span class="line-break">登録していただいた</span><span class="line-break">メールアドレスに</span><span class="line-break">認証メールを</span><span class="line-break">送付しました。</span><br />
+    <span class="line-break">メール認証を</span><span class="line-break">完了してください。</span></p>
 <div class="verify-button">
     <a href="http://localhost:8025/" class="verify-link">認証はこちらから</a>
 </div>

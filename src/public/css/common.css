@@ -1,5 +1,7 @@
-.header {
+.header, .simple-header {
     height: 80px;
+    width: 100vw;
+    min-height: 80px;
     background-color: #000000;
     color: #ffffff;
     font-size: 24px;
@@ -14,8 +16,12 @@
     width: 370px;
 }
 
-.toggle-menu-button {
-    display: none;
+.site-menu {
+    width: 447px;
+}
+
+.image {
+    width: 100%;
 }
 
 .nav-item {
@@ -43,4 +49,86 @@
     color: #0073cc;
     display: block;
     text-align: center;
+}
+
+@media (max-width: 999px) {
+    .header {
+        position: fixed;
+        padding: 0 25px;
+        color: #696969;
+    }
+
+    .site-menu {
+        width: 60px;
+        height: 80px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .menu-icon {
+        display: block;
+        width: 75%;
+        height: 40px;
+        z-index: 3;
+        cursor: pointer;
+    }
+
+    .menu-icon span {
+        background-color: #ffffff;
+        display: block;
+        height: 4px;
+        margin: 6px 0;
+        border-radius: 2px;
+        transition: 0.4s;
+    }
+
+    #toggle-menu-button:checked + .menu-icon span:nth-child(1) {
+        transform: translateY(10px) rotate(45deg);
+    }
+
+    #toggle-menu-button:checked + .menu-icon span:nth-child(2) {
+        opacity: 0;
+    }
+
+    #toggle-menu-button:checked + .menu-icon span:nth-child(3) {
+        transform: translateY(-10px) rotate(-45deg);
+    }
+
+    .header-nav {
+        position: fixed;
+        width: 200px;
+        top: 80px;
+        right: -200px;
+        background-color: #c8c8c8;
+        transition: right 0.4s ease;
+        z-index: 2;
+    }
+
+    #toggle-menu-button:checked ~ .header-nav {
+        right: 0;
+    }
+
+    .nav-item {
+        display: block;
+        padding-left: 20px;
+    }
+
+    .nav-item li {
+        text-decoration: underline;
+    }
+
+    .logout-button {
+        background-color: transparent;
+        color: #696969;
+        padding: 0;
+        text-decoration: underline;
+    }
+}
+
+
+@media (max-width: 609px) {
+    .header-logo {
+        width: 50vw;
+    }
 }

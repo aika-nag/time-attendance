@@ -34,9 +34,42 @@
     width: 221px;
     height: 77px;
     background-color: #000000;
+    border: none;
     color: #ffffff;
     font-size: 32px;
     font-weight: bold;
     border-radius: 20px;
     margin-bottom: 50px;
+}
+
+.attendance-form {
+    width: 100vw;
+}
+
+.flex {
+    display: flex;
+    width: 100vw;
+    justify-content: space-between;
+    margin: auto;
+}
+
+.break {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+.well-done-message {
+    color: #000000;
+    font-size: 26px;
+    font-weight: bold;
+}
+
+@media (max-width: 589px) {
+    .flex {
+        display: block;
+    }
+
+    .date {
+        font-size: 36px;
+    }
 }

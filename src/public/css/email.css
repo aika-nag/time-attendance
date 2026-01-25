@@ -1,9 +1,13 @@
 .notice-message {
-    width: 48%;
+    width: 80%;
     margin: 240px auto 62px;
     font-weight: bold;
     font-size: 24px;
     text-align: center;
+}
+
+.line-break {
+    display: inline-block;
 }
 
 .verify-button {
@@ -30,7 +34,23 @@
     border: none;
     font-size: 20px;
     color: #0073cc;
-    width: 17%;
+    width: 80%;
     margin: 52px auto;
     display: block;
+}
+
+@media (max-width: 1269px) {
+    .verify-button {
+        width: 60%;
+    }
+}
+
+@media (max-width: 499px) {
+    .notice-message {
+        margin: 100px auto 40px;
+    }
+
+    .resend-button {
+        margin: 40px auto;
+    }
 }
