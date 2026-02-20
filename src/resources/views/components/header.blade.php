@@ -12,14 +12,10 @@
         <nav class="header-nav">
             <ul class="nav-item">
                 <li>勤怠</li>
-                <li>勤怠一覧</li>
+                <li><a href="/attendance/list" class="page-link">勤怠一覧</a></li>
                 <li>申請</li>
                 <li>
-                    @auth('admin')
-                    <form action="/admin/logout" method="post">
-                    @else
                     <form action="/logout" method="post">
-                    @endauth
                     @csrf
                         <button class="logout-button">ログアウト</button>
                     </form>

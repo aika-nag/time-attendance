@@ -19,7 +19,7 @@ class CreateAttendancesTable extends Migration
             $table->date('date');
             $table->datetime('start_time');
             $table->datetime('end_time')->nullable();
-            $table->time('break_time')->nullable();
+            $table->integer('break_minutes')->nullable();
             $table->tinyInteger('status')->default(1); // 1: 修正なし, 2: 修正申請中, 3: 修正済み
             $table->timestamps();
         });

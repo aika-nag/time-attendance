@@ -24,6 +24,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/finish', [AttendanceController::class, 'endDay']);
     Route::post('/attendance/break-begin', [BreakTimeController::class, 'store']);
     Route::post('/attendance/break-finish', [BreakTimeController::class, 'endBreakTime']);
+    Route::get('/attendance/list', [AttendanceController::class, 'show']);
 });
 
 Route::get('/email/verify', function () {
@@ -45,5 +46,6 @@ Route::prefix('admin')->group(function () {
     Route::middleware('auth:admin')->group(function () {
         Route::get('/attendance/list', [AdminController::class, 'index']);
         Route::post('/logout', [AdminController::class, 'destroy'])->name('admin.logout');
+        Route::get('/staff/list', [AdminController::class, 'showStaff']);
     });
 });

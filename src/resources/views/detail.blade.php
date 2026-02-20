@@ -7,7 +7,10 @@
 @endsection
 
 @section('content')
-
+@auth
+@include('components.admin-header')
+@else
 @include('components.header')
+@endauth
 <p>打刻画面</p>
 @endsection

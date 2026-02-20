@@ -36,6 +36,6 @@
     <label for="password_confirmation" class="input-label">パスワード確認</label>
     <input type="password" name="password_confirmation" id="password_confirmation" class="input">
     <button class="submit-button">登録する</button>
-    <a href="/login" class="page-link">ログインはこちら</a>
+    <a href="/login" class="page-link authentication">ログインはこちら</a>
 </form>
 @endsection

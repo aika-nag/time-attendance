@@ -43,8 +43,38 @@ class AttendanceController extends Controller
             ->where('date', today())
             ->first();
         $attendance->end_time = Carbon::now();
+
+        if($attendance->break_minutes === null){
+            $attendance->break_minutes = 0;
+        }
         $attendance->update();
 
+
         return redirect('/');
+    }
+
+    public function show(Request $request)
+    {
+        $targetDate = $request->date;
+        if($request->has('date')){
+            $targetDate = Carbon::createFromFormat('Y-m', $request->date);
+        }else{
+            $targetDate = Carbon::now();
+        }
+
+        $year = $targetDate->year;
+        $month = $targetDate->month;
+        $firstDay = $targetDate->copy()->firstOfMonth()->day;
+        $lastDay = $targetDate->copy()->endOfMonth()->day;
+        $attendances = Attendance::where('user_id', Auth::id())->whereYear('date', $year)->whereMonth('date', $month)->get()->keyBy(fn ($attendance) =>
+        $attendance->date->toDateString());
+        $monthDayLists = [];
+        for ($day = $firstDay ;$day <= $lastDay;$day++) {
+            $monthDayLists[] = Carbon::create($year, $month, $day);
+        }
+
+        $prevMonth = $targetDate->copy()->subMonth()->format('Y-m');
+        $nextMonth = $targetDate->copy()->addMonth()->format('Y-m');
+        return view('list', compact('attendances','monthDayLists', 'targetDate', 'prevMonth', 'nextMonth'));
     }
 }

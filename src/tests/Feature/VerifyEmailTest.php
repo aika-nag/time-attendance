@@ -48,9 +48,14 @@ class VerifyEmailTest extends TestCase
 
         $this->assertNull($user->email_verified_at);
         $response = $this->actingAs($user)->get('/');
-
         $response->assertRedirect('/email/verify');
-        $response = $this->get('http://localhost:8025');
-        $response->assertStatus(200);
+
+        $verifyResponse = $this->actingAs($user)->get('/email/verify');
+        $verifyResponse->assertSee('認証はこちらから');
+        $verifyResponse->assertSee('http://localhost:8025');
+
+        $linkResponse = $this->actingAs($user)->get('http://localhost:8025');
+        $linkResponse->assertSee('メールアドレスの確認');
+
     }
 }

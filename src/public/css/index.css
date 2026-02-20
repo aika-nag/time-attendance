@@ -1,14 +1,4 @@
-.body {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-}
 
-.time-attendance {
-    background-color: #f0eff2;
-    flex-grow: 1;
-    text-align: center;
-}
 
 .user-status {
     margin: 209px auto 32px;
@@ -44,11 +34,14 @@
 
 .attendance-form {
     width: 100vw;
+    max-width: 221px;
+    margin: auto;
 }
 
 .flex {
     display: flex;
     width: 100vw;
+    max-width: 524px;
     justify-content: space-between;
     margin: auto;
 }

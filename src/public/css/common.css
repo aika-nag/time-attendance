@@ -1,3 +1,15 @@
+.body {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.time-attendance {
+    background-color: #f0eff2;
+    flex-grow: 1;
+    text-align: center;
+}
+
 .header, .simple-header {
     height: 80px;
     width: 100vw;
@@ -43,12 +55,26 @@
 }
 
 .page-link {
-    margin-top: 17px;
     text-decoration: none;
-    font-size: 20px;
-    color: #0073cc;
-    display: block;
-    text-align: center;
+    color: #ffffff;
+}
+
+.page-title {
+    font-size: 30px;
+    font-weight: bold;
+    height: 36px;
+    margin: 126px auto 47px;
+    width: 60%;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.page-title::before {
+    content: "";
+    border-left: 8px solid #000000;
+    display: inline-block;
+    height: 36px;
 }
 
 @media (max-width: 999px) {

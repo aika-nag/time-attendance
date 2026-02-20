@@ -24,7 +24,8 @@
     <p class="user-status">勤務外</p>
     @endif
     <p class="date">{{ today()->format('Y年n月j日') }}{{ today()->isoFormat('(ddd)') }}</p>
-    <p class="time">{{ now()->format('H:i') }}</p>
+    <p class="time" id="time"></p>
     @include('components.attendance-button')
+    <script src="{{ asset('/js/index.js') }}"></script>
 </main>
 @endsection

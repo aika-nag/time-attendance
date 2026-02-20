@@ -27,6 +27,6 @@
         @enderror
     </div>
     <button class="submit-button">ログインする</button>
-    <a href="/register" class="page-link">会員登録はこちら</a>
+    <a href="/register" class="page-link authentication">会員登録はこちら</a>
 </form>
 @endsection

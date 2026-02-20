@@ -47,9 +47,9 @@ class BreakTimeController extends Controller
             ->first();
 
         $attendance->update([
-            'break_time' => $totalBreakTime
+            'break_minutes' => $totalBreakTime
         ]);
-        
+
         return redirect('/');
     }
 }

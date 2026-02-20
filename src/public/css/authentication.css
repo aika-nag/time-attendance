@@ -34,6 +34,14 @@
     font-weight: bold;
 }
 
+.page-link.authentication {
+    margin-top: 17px;
+    font-size: 20px;
+    color: #0073cc;
+    display: block;
+    text-align: center;
+}
+
 @media (max-width: 609px) {
     .form {
         width: 80%;
