@@ -32,7 +32,7 @@
             <td>{{ $attendance?->end_time?->format('H:i') }}</td>
             <td>{{ $attendance?->break_time }}</td>
             <td>{{ $attendance?->total_work_time }}</td>
-            <td><a href="/attendance/detail" class="detail-link">詳細</a></td>
+            <td><a href="/admin/attendance/{{ $attendance->id}}" class="detail-link">詳細</a></td>
         </tr>
         @endforeach
     </table>
@@ -48,29 +48,7 @@
         <p class="selected-date">{{ $targetDate->format('Y/m') }}</p>
         <a href="{{ url('/attendance/list?date='. $nextMonth) }}" class="next-link">翌月</a>
     </div>
-    <table class="attendance-table">
-        <tr>
-            <th>日付</th>
-            <th>出勤</th>
-            <th>退勤</th>
-            <th>休憩</th>
-            <th>合計</th>
-            <th>詳細</th>
-        </tr>
-        @foreach($monthDayLists as $day)
-        @php
-        $attendance = $attendances[$day->toDateString()] ?? null;
-        @endphp
-        <tr>
-            <td>{{ $day->format('m/d') }}({{ ['日', '月', '火', '水', '木', '金', '土'][$day->dayOfWeek] }})</td>
-            <td>{{ $attendance?->start_time->format('H:i') }}</td>
-            <td>{{ $attendance?->end_time?->format('H:i') }}</td>
-            <td>{{ $attendance?->break_time }}</td>
-            <td>{{ $attendance?->total_work_time }}</td>
-            <td><a href="/attendance/detail" class="detail-link">詳細</a></td>
-        </tr>
-        @endforeach
-    </table>
-    </main>
+    @include('components.attendance-table')
+</main>
 @endauth
 @endsection

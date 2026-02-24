@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AttendanceController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\BreakTimeController;
+use App\Http\Controllers\CorrectionController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use Illuminate\Http\Request;
 
@@ -25,6 +26,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/break-begin', [BreakTimeController::class, 'store']);
     Route::post('/attendance/break-finish', [BreakTimeController::class, 'endBreakTime']);
     Route::get('/attendance/list', [AttendanceController::class, 'show']);
+    Route::get('/stamp_correction_request/list', [CorrectionController::class, 'show'])->name('correction');
+    Route::get('/attendance/detail/{attendance?}', [AttendanceController::class, 'detail'])->name('detail');
+    Route::post('/attendance/detail/{attendance?}', [CorrectionController::class, 'edit']);
 });
 
 Route::get('/email/verify', function () {
@@ -47,5 +51,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/attendance/list', [AdminController::class, 'index']);
         Route::post('/logout', [AdminController::class, 'destroy'])->name('admin.logout');
         Route::get('/staff/list', [AdminController::class, 'showStaff']);
+        Route::get('/attendance/staff/{user}',[AdminController::class, 'showAttendance'])->name('admin.attendance');
+        Route::get('/stamp_correction_request/list', [AdminController::class, 'showCorrection'])->name('admin.correction');
+        Route::get('/attendance/{attendance}', [AdminController::class, 'detail'])->name('admin.detail');
     });
 });

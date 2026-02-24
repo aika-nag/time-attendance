@@ -11,7 +11,7 @@
 @include('components.simple-header')
 <form action="/admin/login" method="post" class="form">
     @csrf
-    <h1 class="page-title">管理者ログイン</h1>
+    <h1 class="auth-title">管理者ログイン</h1>
     <label for="email" class="input-label">メールアドレス</label>
     <input type="email" name="email" id="email" class="input">
     <div class="error">

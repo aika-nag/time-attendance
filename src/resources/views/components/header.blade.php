@@ -11,9 +11,9 @@
         </label>
         <nav class="header-nav">
             <ul class="nav-item">
-                <li>勤怠</li>
+                <li><a href="/" class="page-link">勤怠</a></li>
                 <li><a href="/attendance/list" class="page-link">勤怠一覧</a></li>
-                <li>申請</li>
+                <li><a href="/stamp_correction_request/list" class="page-link">申請</a></li>
                 <li>
                     <form action="/logout" method="post">
                     @csrf

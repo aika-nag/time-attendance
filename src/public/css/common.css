@@ -32,13 +32,17 @@
     width: 447px;
 }
 
+.site-menu.admin {
+    width: 655px;
+}
+
 .image {
     width: 100%;
 }
 
 .nav-item {
     display: flex;
-    gap: 41px;
+    justify-content: space-around;
 }
 
 .logout-button {

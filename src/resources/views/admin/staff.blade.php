@@ -9,8 +9,8 @@
 @section('content')
 
 @include('components.admin-header')
-@include('components.heading')
 <main class="time-attendance">
+    @include('components.heading')
     <table class="attendance-table">
         <tr>
             <th>名前</th>
@@ -21,7 +21,7 @@
         <tr>
             <td>{{ $user->name }}</td>
             <td>{{ $user->email }}</td>
-            <td>詳細</td>
+            <td><a href="/admin/attendance/staff/{{ $user->id }}" class="detail-link">詳細</td>
         </tr>
         @endforeach
     </table>

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\BreakTime;
+use App\Models\Correction;
 use Carbon\Carbon;
 use PhpParser\Node\Stmt\Break_;
 
@@ -76,5 +77,20 @@ class AttendanceController extends Controller
         $prevMonth = $targetDate->copy()->subMonth()->format('Y-m');
         $nextMonth = $targetDate->copy()->addMonth()->format('Y-m');
         return view('list', compact('attendances','monthDayLists', 'targetDate', 'prevMonth', 'nextMonth'));
+    }
+
+    public function detail(Attendance $attendance, Request $request)
+    {
+        if(!$attendance->exists){
+            $attendance->user_id = Auth::id();
+            $attendance->date = $request->date;
+            $breakTimes = collect();
+            $unapprovedCorrectionExists = null;
+        } else {
+        $breakTimes = BreakTime::where('user_id', Auth::id())->where('date', $attendance->date)->whereNotNull('end_time')->get();
+
+        $unapprovedCorrectionExists = Correction::where('attendance_id', $attendance->id)->where('status', 1)->first();
+        }
+        return view('detail', compact('attendance', 'breakTimes', 'unapprovedCorrectionExists'));
     }
 }

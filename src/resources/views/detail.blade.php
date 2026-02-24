@@ -7,10 +7,22 @@
 @endsection
 
 @section('content')
-@auth
+@auth('admin')
 @include('components.admin-header')
-@else
+<main class="time-attendance">
+    <form action="">
+        @include('components.heading')
+        @include('components.detail-table')
+    </form>
+</main>
+@elseauth
 @include('components.header')
+<main class="time-attendance">
+    <form action="/attendance/detail/{{ $attendance->id }}" class="form" method="post">
+        @csrf
+        @include('components.heading')
+        @include('components.detail-table')
+    </form>
+</main>
 @endauth
-<p>打刻画面</p>
 @endsection

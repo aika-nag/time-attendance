@@ -11,7 +11,7 @@
 @include('components.simple-header')
 <form action="/register" method="post" class="form">
     @csrf
-    <h1 class="page-title">会員登録</h1>
+    <h1 class="auth-title">会員登録</h1>
     <label for="name" class="input-label">名前</label>
     <input type="text" name="name" id="name" class="input">
     <div class="error">

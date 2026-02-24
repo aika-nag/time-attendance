@@ -17,7 +17,6 @@ class Attendance extends Model
         'start_time',
         'end_time',
         'break_minutes',
-        'status'
     ];
 
     protected $casts = [
@@ -30,6 +29,11 @@ class Attendance extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function correction()
+    {
+        return $this->hasMany(Correction::class);
     }
 
     public function getTotalWorkMinutesAttribute()
