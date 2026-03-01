@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
 use App\Models\BreakTime;
 use App\Models\Correction;
+use App\Models\CorrectionBreak;
 use Carbon\Carbon;
 use PhpParser\Node\Stmt\Break_;
 
@@ -82,15 +83,34 @@ class AttendanceController extends Controller
     public function detail(Attendance $attendance, Request $request)
     {
         if(!$attendance->exists){
-            $attendance->user_id = Auth::id();
-            $attendance->date = $request->date;
-            $breakTimes = collect();
-            $unapprovedCorrectionExists = null;
+            $unapprovedCorrectionExists = Correction::where('user_id', Auth::id())->where('date', $request->date)->where('status', 1)->first();
+            if(!$unapprovedCorrectionExists){
+                $attendance->user_id = Auth::id();
+                $attendance->date = $request->date;
+                $mode = "edit";
+                $breakTimes = collect();
+            }else {
+                $attendance = $unapprovedCorrectionExists;
+                $correctionBreakExists = CorrectionBreak::where('correction_id', $unapprovedCorrectionExists->id)->get();
+                $breakTimes = $correctionBreakExists;
+                $mode = "view";
+            }
         } else {
-        $breakTimes = BreakTime::where('user_id', Auth::id())->where('date', $attendance->date)->whereNotNull('end_time')->get();
-
-        $unapprovedCorrectionExists = Correction::where('attendance_id', $attendance->id)->where('status', 1)->first();
+            $unapprovedCorrectionExists = Correction::where('user_id', Auth::id())->where('attendance_id', $attendance->id)->where('status', 1)->first();
+            if(!$unapprovedCorrectionExists){
+                $mode = "edit";
+                $breakTimes = BreakTime::where('user_id', Auth::id())->where('date', $attendance->date)->whereNotNull('end_time')->get();
+            }else {
+                $attendance = $unapprovedCorrectionExists;
+                $correctionBreakExists = CorrectionBreak::where('correction_id', $unapprovedCorrectionExists->id)->get();
+                if(!$correctionBreakExists){
+                    $breakTimes = collect();
+                } else {
+                $breakTimes = $correctionBreakExists;
+                }
+                $mode = "view";
+            }
         }
-        return view('detail', compact('attendance', 'breakTimes', 'unapprovedCorrectionExists'));
+        return view('detail', compact('attendance', 'breakTimes', 'mode'));
     }
 }

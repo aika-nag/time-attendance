@@ -28,7 +28,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/attendance/list', [AttendanceController::class, 'show']);
     Route::get('/stamp_correction_request/list', [CorrectionController::class, 'show'])->name('correction');
     Route::get('/attendance/detail/{attendance?}', [AttendanceController::class, 'detail'])->name('detail');
-    Route::post('/attendance/detail/{attendance?}', [CorrectionController::class, 'edit']);
+    Route::post('/attendance/detail/correction_requested', [CorrectionController::class, 'store']);
 });
 
 Route::get('/email/verify', function () {
@@ -53,6 +53,8 @@ Route::prefix('admin')->group(function () {
         Route::get('/staff/list', [AdminController::class, 'showStaff']);
         Route::get('/attendance/staff/{user}',[AdminController::class, 'showAttendance'])->name('admin.attendance');
         Route::get('/stamp_correction_request/list', [AdminController::class, 'showCorrection'])->name('admin.correction');
-        Route::get('/attendance/{attendance}', [AdminController::class, 'detail'])->name('admin.detail');
+        Route::get('/stamp_correction_request/approve/{correction?}', [AdminController::class, 'showCorrectionDetail'])->name('admin.request');
+        Route::post('/stamp_correction_request/approve/{correction}', [AdminController::class, 'approve'])->name('admin.approve');
+        Route::get('/attendance/{attendance?}', [AdminController::class, 'detail'])->name('admin.detail');
     });
 });

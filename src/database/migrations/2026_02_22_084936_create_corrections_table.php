@@ -15,12 +15,12 @@ class CreateCorrectionsTable extends Migration
     {
         Schema::create('corrections', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->constrained();
+            $table->foreignId('attendance_id')->nullable()->constrained();
+            $table->date('date');
             $table->time('start_time')->nullable();
             $table->time('end_time')->nullable();
             $table->string('reason', 100);
-            $table->date('date');
             $table->tinyInteger('status')->default(1); // 1: 未承認, 2: 修正承認済み
             $table->timestamps();
         });

@@ -5,7 +5,7 @@
 <h1 class="page-title">スタッフ一覧</h1>
 @elseif(Route::is('admin.attendance'))
 <h1 class="page-title">{{ $user->name }}さんの勤怠</h1>
-@elseif(Route::is('admin.detail'))
+@elseif(Route::is('admin.detail')||Route::is('admin.request'))
 <h1 class="page-title">勤怠詳細</h1>
 @elseif(Route::is('admin.correction'))
 <h1 class="page-title">申請一覧</h1>

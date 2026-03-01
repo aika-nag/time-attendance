@@ -43,4 +43,29 @@ class CorrectionRequest extends FormRequest
             'reason.required' => '備考を記入してください'
         ];
     }
+
+    //休憩時間が配列になっているため、同じ配列番号の休憩開始時間と休憩終了時間を比べる
+    public function withValidator($validator)
+    {
+        $validator->after(function ($validator)
+        {
+            $startTimes = $this->input('break_start_time',[]);
+            $endTimes = $this->input('break_end_time', []);
+            foreach($startTimes as $index => $startTime)
+                {
+                    $endTime = $endTimes[$index]?? null;
+                    if(empty($startTime)||empty($endTime))
+                        {
+                            continue;
+                        }
+                    if($startTime>= $endTime)
+                        {
+                            $validator->errors()->add(
+                                "break_end_time.$index",
+                                '休憩終了時間は休憩開始時間より後に設定してください'
+                            );
+                        }
+                }
+        });
+    }
 }

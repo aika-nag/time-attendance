@@ -12,10 +12,10 @@ class Correction extends Model
     protected $fillable = [
         'user_id',
         'attendance_id',
+        'date',
         'start_time',
         'end_time',
         'reason',
-        'date',
         'status'
     ];
 
@@ -26,10 +26,5 @@ class Correction extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
-    }
-
-    public function attendance()
-    {
-        return $this->belongsTo(Attendance::class);
     }
 }
