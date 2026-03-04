@@ -16,17 +16,17 @@
     @include('components.heading')
     @if($mode== "view")
     <x-detail-table
-        :attendance="$attendance"
+        :attendance="$displayData"
         :breakTimes="$breakTimes"
         mode="view" />
     <div class="button-area">
         <p class="error">＊承認待ちのため修正はできません</p>
     </div>
     @elseif($mode== "approve")
-    <form action="{{ route('admin.approve', $attendance->id) }}" class="form" method="post">
+    <form action="{{ route('admin.approve', $displayData->id) }}" class="form" method="post">
         @csrf
         <x-detail-table
-        :attendance="$attendance"
+        :attendance="$displayData"
         :breakTimes="$breakTimes"
         mode="approve" />
         <div class="button-area">
@@ -34,22 +34,19 @@
         </div>
     </form>
     @elseif($mode== "approved")
-    <form action="{{ route('admin.approve', $attendance->id) }}" class="form" method="post">
-        @csrf
         <x-detail-table
-        :attendance="$attendance"
+        :attendance="$displayData"
         :breakTimes="$breakTimes"
         mode="approved" />
         <div class="button-area">
         <button class="edit-button" disabled>承認済み</button>
         </div>
-    </form>
     @else
     <form action="/attendance/detail/correction_requested" class="form" method="post">
         @csrf
-        <input type="hidden" name="date" value="{{ $attendance->date }}">
+        <input type="hidden" name="date" value="{{ $displayData->date }}">
         <x-detail-table
-            :attendance="$attendance"
+            :attendance="$displayData"
             :breakTimes="$breakTimes"
             mode="edit" />
         <div class="message-area">

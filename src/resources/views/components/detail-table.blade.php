@@ -19,21 +19,21 @@
         <th>出勤・退勤</th>
         <td>
             @if($mode== "approve")
-            <input type="time" value="{{  $attendance->start_time }}" class="input" name="start_time" readonly>
+            <input type="time" value="{{  $attendance->start_time->format('H:i') }}" class="input" name="start_time" readonly>
             @elseif($mode== "edit")
-            <input type="time" value="{{ old('start_time', $attendance->start_time?->format('H:i')) }}" class="input" name="start_time">
+            <input type="time" value="{{ old('start_time', $attendance?->start_time?->format('H:i')) }}" class="input" name="start_time">
             @else
-            <input type="time" value="{{ $attendance->start_time }}" class="input" name="start_time" readonly>
+            <input type="time" value="{{ $attendance->start_time->format('H:i') }}" class="input" name="start_time" readonly>
             @endif
         </td>
         <td>〜</td>
         <td>
             @if($mode== "approve")
-            <input type="time" value="{{ $attendance?->end_time }}" class="input" name="end_time" readonly>
+            <input type="time" value="{{ $attendance?->end_time?->format('H:i') }}" class="input" name="end_time" readonly>
             @elseif($mode== "edit")
             <input type="time" value="{{ old('end_time', $attendance?->end_time?->format('H:i')) }}" class="input" name="end_time">
             @else
-            <input type="time" value="{{ $attendance?->end_time }}" class="input" name="end_time" readonly>
+            <input type="time" value="{{ $attendance?->end_time?->format('H:i') }}" class="input" name="end_time" readonly>
             @endif
         </td>
     </tr>
@@ -53,11 +53,11 @@
     <tr>
         <th>休憩{{ $loop->iteration }}</th>
         <td>
-            <input type="time" value="{{ old('break_start_time.$loop->index',  $breakTime->start_time) }}" class="input" name="break_start_time[]" {{ $mode !== 'edit' ? 'readonly': '' }}>
+            <input type="time" value="{{ old('break_start_time.$loop->index',  $breakTime->start_time->format('H:i')) }}" class="input" name="break_start_time[]" {{ $mode !== 'edit' ? 'readonly': '' }}>
         </td>
         <td>〜</td>
         <td>
-            <input type="time" value="{{ old('break_end_time.$loop->index', $breakTime->end_time) }}" class="input" name="break_end_time[]" {{ $mode !== 'edit' ? 'readonly': '' }}>
+            <input type="time" value="{{ old('break_end_time.$loop->index', $breakTime->end_time->format('H:i')) }}" class="input" name="break_end_time[]" {{ $mode !== 'edit' ? 'readonly': '' }}>
         </td>
     </tr>
     @endforeach

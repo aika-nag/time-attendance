@@ -21,10 +21,22 @@ class Correction extends Model
 
     protected $casts = [
         'date' => 'date',
+        'start_time' => 'datetime:H:i',
+        'end_time' => 'datetime:H:i'
     ];
 
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function correctionBreaks()
+    {
+        return $this->hasMany(CorrectionBreak::class);
+    }
+
+    public function attendance()
+    {
+        return $this->belongsTo(Attendance::class);
     }
 }

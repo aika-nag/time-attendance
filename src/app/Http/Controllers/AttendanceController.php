@@ -19,38 +19,37 @@ class AttendanceController extends Controller
         $attendance = Attendance::where('user_id', Auth::id())
             ->where('date', today())
             ->first();
+        if($attendance){
+            $breakTimeNow = BreakTime::where('user_id', Auth::id())
+                ->where('attendance_id', $attendance->id)
+                ->where('end_time', null)
+                ->first();
+            return view('index', compact('attendance', 'breakTimeNow'));
+        }
 
-        $breakTimeNow = BreakTime::where('user_id', Auth::id())
-            ->where('date', today())
-            ->where('end_time', null)
-            ->first();
-
-        return view('index', compact('attendance', 'breakTimeNow'));
+        return view('index', compact('attendance'));
     }
 
-    public function store(Request $request)
+    public function store()
     {
         $attendance = new Attendance();
         $attendance->user_id = Auth::id();
         $attendance->date = today();
-        $attendance->start_time = Carbon::now();
+        $attendance->start_time = now()->format('H:i:00');
         $attendance->save();
 
         return redirect('/');
     }
 
-    public function endDay(Request $request)
+    public function endDay()
     {
         $attendance = Attendance::where('user_id', Auth::id())
             ->where('date', today())
+            ->whereNull('end_time')
             ->first();
-        $attendance->end_time = Carbon::now();
-
-        if($attendance->break_minutes === null){
-            $attendance->break_minutes = 0;
-        }
-        $attendance->update();
-
+        $attendance->update([
+            'end_time' => now()->format('H:i:00')
+        ]);
 
         return redirect('/');
     }
@@ -63,7 +62,6 @@ class AttendanceController extends Controller
         }else{
             $targetDate = Carbon::now();
         }
-
         $year = $targetDate->year;
         $month = $targetDate->month;
         $firstDay = $targetDate->copy()->firstOfMonth()->day;
@@ -74,43 +72,40 @@ class AttendanceController extends Controller
         for ($day = $firstDay ;$day <= $lastDay;$day++) {
             $monthDayLists[] = Carbon::create($year, $month, $day);
         }
-
         $prevMonth = $targetDate->copy()->subMonth()->format('Y-m');
         $nextMonth = $targetDate->copy()->addMonth()->format('Y-m');
+
         return view('list', compact('attendances','monthDayLists', 'targetDate', 'prevMonth', 'nextMonth'));
     }
 
     public function detail(Attendance $attendance, Request $request)
     {
-        if(!$attendance->exists){
-            $unapprovedCorrectionExists = Correction::where('user_id', Auth::id())->where('date', $request->date)->where('status', 1)->first();
-            if(!$unapprovedCorrectionExists){
-                $attendance->user_id = Auth::id();
-                $attendance->date = $request->date;
-                $mode = "edit";
-                $breakTimes = collect();
-            }else {
-                $attendance = $unapprovedCorrectionExists;
-                $correctionBreakExists = CorrectionBreak::where('correction_id', $unapprovedCorrectionExists->id)->get();
-                $breakTimes = $correctionBreakExists;
-                $mode = "view";
-            }
+        if($attendance->exists) {
+            $date = $attendance->date;
         } else {
-            $unapprovedCorrectionExists = Correction::where('user_id', Auth::id())->where('attendance_id', $attendance->id)->where('status', 1)->first();
-            if(!$unapprovedCorrectionExists){
-                $mode = "edit";
-                $breakTimes = BreakTime::where('user_id', Auth::id())->where('date', $attendance->date)->whereNotNull('end_time')->get();
-            }else {
-                $attendance = $unapprovedCorrectionExists;
-                $correctionBreakExists = CorrectionBreak::where('correction_id', $unapprovedCorrectionExists->id)->get();
-                if(!$correctionBreakExists){
-                    $breakTimes = collect();
-                } else {
-                $breakTimes = $correctionBreakExists;
-                }
-                $mode = "view";
-            }
+            $date = $request->date;
         }
-        return view('detail', compact('attendance', 'breakTimes', 'mode'));
+        $unApprovedCorrection = Correction::where('user_id', Auth::id())
+            ->where('date', $date)
+            ->where('status', 1)
+            ->with('correctionBreaks')->first();
+        if($unApprovedCorrection){
+            $displayData = $unApprovedCorrection;
+            $breakTimes = $unApprovedCorrection->correctionBreaks;
+            $mode = "view";
+        } elseif($attendance->exists){
+            $displayData = $attendance;
+            $breakTimes = $attendance->breakTimes;
+            $mode = "edit";
+        } else {
+            $displayData = new Attendance([
+                'user_id' => Auth::id(),
+                'date' => $date
+            ]);
+            $breakTimes = collect();
+            $mode = "edit";
+        }
+
+        return view('detail', compact('displayData', 'breakTimes', 'mode'));
     }
 }

@@ -10,44 +10,30 @@ use Carbon\Carbon;
 
 class BreakTimeController extends Controller
 {
-    public function store(Request $request)
+    public function store()
     {
+        $attendance = Attendance::where('user_id', Auth::id())->whereDate('date', today())->whereNull('end_time')->first();
         $breakTime = new BreakTime();
         $breakTime->user_id = Auth::id();
-        $breakTime->date = today();
-        $breakTime->start_time = Carbon::now();
+        $breakTime->attendance_id = $attendance->id;
+        $breakTime->start_time = now()->format('H:i:00');
         $breakTime->save();
 
         return redirect('/');
     }
 
-    public function endBreakTime(Request $request)
+    public function endBreakTime()
     {
-        $breakTime = BreakTime::where('user_id', Auth::id())
-            ->where('date', today())
-            ->whereNull('end_time')
-            ->first()
-            ->update([
-            'end_time' => Carbon::now()
-        ]);
-
-        $breakTimes = BreakTime::where('user_id', Auth::id())
-            ->where('date', today())
-            ->whereNotNull('end_time')
-            ->get();
-
-        $totalBreakTime = 0;
-        foreach($breakTimes as $breakTime){
-            $diff = $breakTime->end_time->diffInMinutes($breakTime->start_time);
-            $totalBreakTime += $diff;
-        }
         $attendance = Attendance::where('user_id', Auth::id())
-            ->where('date', today())
-            ->whereNull('end_time')
-            ->first();
-
-        $attendance->update([
-            'break_minutes' => $totalBreakTime
+            ->whereDate('date', today())
+            ->whereNull('end_time')->first();
+        if(!$attendance) {
+            return redirect('/');
+        }
+        $breakTime = $attendance->breakTimes()
+            ->whereNull('end_time')->first();
+        $breakTime->update([
+            'end_time' => now()->format('H:i:00')
         ]);
 
         return redirect('/');

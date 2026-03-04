@@ -58,13 +58,13 @@ class AdminController extends Controller
         $attendances = Attendance::whereDate('date', $targetDate)->get();
         $prevDay = $targetDate->copy()->subDay()->format('Y-m-d');
         $nextDay = $targetDate->copy()->addDay()->format('Y-m-d');
+
         return view('list', compact('attendances', 'targetDate', 'prevDay', 'nextDay'));
     }
 
     public function destroy(Request $request): AdminLogoutResponse
     {
         Auth::guard('admin')->logout();
-
         $request->session()->invalidate();
         $request->session()->regenerateToken();
 
@@ -86,7 +86,6 @@ class AdminController extends Controller
         }else{
             $targetDate = Carbon::now();
         }
-
         $year = $targetDate->year;
         $month = $targetDate->month;
         $firstDay = $targetDate->copy()->firstOfMonth()->day;
@@ -97,7 +96,6 @@ class AdminController extends Controller
         for ($day = $firstDay ;$day <= $lastDay;$day++) {
             $monthDayLists[] = Carbon::create($year, $month, $day);
         }
-
         $prevMonth = $targetDate->copy()->subMonth()->format('Y-m');
         $nextMonth = $targetDate->copy()->addMonth()->format('Y-m');
 
@@ -106,18 +104,17 @@ class AdminController extends Controller
 
     public function detail(Attendance $attendance)
     {
-        $breakTimes = BreakTime::where('user_id', $attendance->user_id)->where('date', $attendance->date)->whereNotNull('end_time')->get();
-        $unapprovedCorrectionExists = Correction::where('attendance_id', $attendance->id)->where('status', 1)->first();
-
+        $breakTimes = $attendance->breakTimes;
+        $unapprovedCorrectionExists = $attendance->corrections->where('status', 1)->first();
         if($unapprovedCorrectionExists){
             $data = [
-            'attendance' => $unapprovedCorrectionExists,
+            'displayData' => $unapprovedCorrectionExists,
             'breakTimes' => $breakTimes,
             'mode' => 'approve'
         ];
         } else{
             $data = [
-                'attendance' => $attendance,
+                'displayData' => $attendance,
                 'breakTimes' => $breakTimes,
                 'mode' => 'edit'
             ];
@@ -136,15 +133,14 @@ class AdminController extends Controller
 
     public function showCorrectionDetail(Correction $correction)
     {
-        $breakTimes = CorrectionBreak::where('correction_id', $correction->id)->get();
-        $attendance = $correction;
+        $breakTimes = $correction->correctionBreaks;
         if($correction->status == 1){
             $mode = "approve";
         } elseif($correction->status == 2){
             $mode = "approved";
         }
         $data = [
-            'attendance' => $attendance,
+            'displayData' => $correction,
             'breakTimes' => $breakTimes,
             'mode' => $mode,
         ];
@@ -152,46 +148,39 @@ class AdminController extends Controller
         return view('detail', $data);
     }
 
-    public function approve(Correction $correction, Request $request)
+    public function approve(Correction $correction)
     {
-        $breakTimes = CorrectionBreak::where('correction_id', $correction->id)->get();
-        $totalBreakTime = 0;
-        foreach($breakTimes as $breakTime){
-            $startTime = Carbon::parse($breakTime->start_time);
-            $endTime = Carbon::parse($breakTime->end_time);
-            $diff = $endTime->diffInMinutes($startTime);
-            $totalBreakTime += $diff;
-        }
+        $breakTimes = $correction->CorrectionBreaks;
         if($correction->attendance_id == null){
             $attendance = new Attendance();
             $attendance->user_id = $correction->user_id;
             $attendance->date = $correction->date;
             $attendance->start_time = $correction->start_time;
             $attendance->end_time = $correction->end_time;
-            $attendance->break_minutes = $totalBreakTime;
             $attendance->save();
 
             $correction->update([
                 'attendance_id' => $attendance->id
             ]);
         } else {
-            $attendance = Attendance::find($correction->attendance_id);
-            if($breakTimes->isEmpty()){
-                $attendance->update([
-                    'start_time' => $correction->start_time,
-                    'end_time' => $correction->end_time
-                ]);
-            } else {
-                $attendance->update([
-                    'start_time' => $correction->start_time,
-                    'end_time' => $correction->end_time,
-                    'break_minutes' => $totalBreakTime
-                ]);
-            }
+            $attendance = $correction->attendance;
+            $attendance->update([
+                'start_time' => $correction->start_time,
+                'end_time' => $correction->end_time
+            ]);
+            $attendance->breakTimes()->delete();
+        }
+        foreach($breakTimes as $breakTime){
+            $attendance->breakTimes()->create([
+                'user_id' => $attendance->user_id,
+                'start_time' => $breakTime->start_time,
+                'end_time' => $breakTime->end_time
+            ]);
         }
         $correction->update([
             'status' => 2
         ]);
+
         return redirect()->route('admin.request', $correction->id);
     }
 }
