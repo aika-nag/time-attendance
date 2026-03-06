@@ -42,9 +42,14 @@
         <button class="edit-button" disabled>承認済み</button>
         </div>
     @else
+    @auth('admin')
+    <form action="/admin/attendance/correction_requested" class="form" method="post">
+    @else
     <form action="/attendance/detail/correction_requested" class="form" method="post">
+    @endauth
         @csrf
         <input type="hidden" name="date" value="{{ $displayData->date }}">
+        <input type="hidden" name="user_id" value="{{ $displayData->user_id}}">
         <x-detail-table
             :attendance="$displayData"
             :breakTimes="$breakTimes"

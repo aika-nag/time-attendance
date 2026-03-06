@@ -24,6 +24,10 @@
     padding: 0 46px 0 25px;
 }
 
+.header.admin {
+    padding: 0 25px 0 25px;
+}
+
 .header-logo {
     width: 370px;
 }
@@ -43,6 +47,11 @@
 .nav-item {
     display: flex;
     justify-content: space-around;
+}
+
+.nav-item.admin {
+    gap: 20px;
+    justify-content: flex-end;
 }
 
 .logout-button {
@@ -96,12 +105,20 @@
         align-items: center;
     }
 
+    .site-menu.admin{
+        justify-content: flex-end;
+    }
+
     .menu-icon {
         display: block;
         width: 75%;
         height: 40px;
         z-index: 3;
         cursor: pointer;
+    }
+
+    .menu-icon.admin {
+        width: 10%;
     }
 
     .menu-icon span {
@@ -148,6 +165,9 @@
         text-decoration: underline;
     }
 
+    .page-link {
+        color: #696969;
+    }
     .logout-button {
         background-color: transparent;
         color: #696969;

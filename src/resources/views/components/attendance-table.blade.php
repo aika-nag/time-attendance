@@ -22,7 +22,10 @@
         @if($attendance)
         <td><a href="/admin/attendance/{{ $attendance?->id }}" class="detail-link">詳細</a></td>
         @else
-        <td>詳細</td>
+        <td><a href="{{ route('admin.detail', [
+                'date' => $day->format('Y-m-d'),
+                'user_id' => $user->id
+            ]) }}" class="detail-link">詳細</a></td>
         @endif
         @endauth
         @auth('web')

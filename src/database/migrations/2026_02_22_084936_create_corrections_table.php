@@ -18,8 +18,8 @@ class CreateCorrectionsTable extends Migration
             $table->foreignId('user_id')->constrained();
             $table->foreignId('attendance_id')->nullable()->constrained();
             $table->date('date');
-            $table->time('start_time')->nullable();
-            $table->time('end_time')->nullable();
+            $table->time('start_time');
+            $table->time('end_time');
             $table->string('reason', 100);
             $table->tinyInteger('status')->default(1); // 1: 未承認, 2: 修正承認済み
             $table->timestamps();

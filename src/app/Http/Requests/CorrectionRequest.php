@@ -44,28 +44,42 @@ class CorrectionRequest extends FormRequest
         ];
     }
 
-    //休憩時間が配列になっているため、同じ配列番号の休憩開始時間と休憩終了時間を比べる
+    //休憩時間が配列になっているため、同じ配列番号の休憩開始時間と休憩終了時間を比べる。また、バグを防ぐため休憩がある時は休憩開始と休憩終了時間の両方を入力させる。
     public function withValidator($validator)
     {
         $validator->after(function ($validator)
         {
-            $startTimes = $this->input('break_start_time',[]);
-            $endTimes = $this->input('break_end_time', []);
-            foreach($startTimes as $index => $startTime)
-                {
-                    $endTime = $endTimes[$index]?? null;
-                    if(empty($startTime)||empty($endTime))
-                        {
-                            continue;
-                        }
-                    if($startTime>= $endTime)
-                        {
-                            $validator->errors()->add(
-                                "break_end_time.$index",
-                                '休憩終了時間は休憩開始時間より後に設定してください'
-                            );
-                        }
-                }
+        $startTimes = $this->input('break_start_time',[]);
+        $endTimes = $this->input('break_end_time', []);
+        foreach($startTimes as $index => $startTime)
+            {
+                $endTime = $endTimes[$index]?? null;
+                if(empty($startTime)&&empty($endTime))
+                    {
+                        continue;
+                    }
+                if(empty($startTime)&&!empty($endTime))
+                    {
+                        $validator->errors()->add(
+                            "break_start_time.$index",
+                            '休憩終了時間を設定するときは休憩開始時間も設定してください'
+                        );
+                    }
+                if(!empty($startTime)&&empty($endTime))
+                    {
+                        $validator->errors()->add(
+                            "break_end_time.$index",
+                            '休憩開始時間を設定するときは休憩終了時間も設定してください'
+                        );
+                    }
+                if($startTime>= $endTime)
+                    {
+                        $validator->errors()->add(
+                            "break_end_time.$index",
+                            '休憩終了時間は休憩開始時間より後に設定してください'
+                        );
+                    }
+            }
         });
     }
 }

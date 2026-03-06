@@ -32,7 +32,9 @@
             <td>{{ $attendance?->end_time?->format('H:i') }}</td>
             <td>{{ $attendance?->total_break_time }}</td>
             <td>{{ $attendance?->total_work_time }}</td>
-            <td><a href="/admin/attendance/{{ $attendance->id}}" class="detail-link">詳細</a></td>
+            <td>
+                <a href="/admin/attendance/{{ $attendance->id}}" class="detail-link">詳細</a>
+            </td>
         </tr>
         @endforeach
     </table>

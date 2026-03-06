@@ -96,3 +96,27 @@
     text-decoration: none;
     color: #000000;
 }
+
+@media (max-width: 1299px) {
+    .page-title {
+        width: 80%;
+    }
+
+    .calendar-head {
+        width: 80%;
+    }
+
+    .attendance-table {
+        width: 80%;
+    }
+
+    .attendance-table th:nth-child(1), .attendance-table td:nth-child(1) {
+        padding: 0;
+        min-width: 100px;
+    }
+
+    .attendance-table th:nth-child(6), .attendance-table td:nth-child(6) {
+        padding: 0;
+        min-width: 50px;
+    }
+}

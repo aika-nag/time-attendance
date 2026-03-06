@@ -102,33 +102,33 @@ class AdminController extends Controller
         return view('admin.attendance', compact('attendances','monthDayLists', 'targetDate', 'prevMonth', 'nextMonth', 'user'));
     }
 
-    public function detail(Attendance $attendance)
+    public function detail(Attendance $attendance, Request $request)
     {
-        $breakTimes = $attendance->breakTimes;
-        $unapprovedCorrectionExists = $attendance->corrections->where('status', 1)->first();
-        if($unapprovedCorrectionExists){
-            $data = [
-            'displayData' => $unapprovedCorrectionExists,
-            'breakTimes' => $breakTimes,
-            'mode' => 'approve'
-        ];
+        if($attendance->exists){
+            $date = $attendance->date;
+            $unApprovedCorrection = $attendance->corrections()->where('status', 1)->with('correctionBreaks')->first();
+        } else {
+            $date = $request->date;
+            $unApprovedCorrection = Correction::where('user_id', $request->user_id)->where('date', $request->date)->where('status', 1)->with('correctionBreaks')->first();
+        }
+        if($unApprovedCorrection){
+            $displayData = $unApprovedCorrection;
+            $breakTimes = $unApprovedCorrection->correctionBreaks;
+            $mode = "approve";
+        } elseif($attendance->exists){
+            $displayData = $attendance;
+            $breakTimes = $attendance->breakTimes;
+            $mode = "edit";
         } else{
-            $data = [
-                'displayData' => $attendance,
-                'breakTimes' => $breakTimes,
-                'mode' => 'edit'
-            ];
+            $displayData = new Attendance([
+                'user_id' => $request->user_id,
+                'date' => $date
+            ]);
+            $breakTimes = collect();
+            $mode = "edit";
         }
 
-        return view('detail', $data);
-    }
-
-    public function showCorrection()
-    {
-        $unApprovedCorrections = Correction::where('status', 1)->get();
-        $approvedCorrections = Correction::where('status', 2)->get();
-
-        return view('request', compact('unApprovedCorrections', 'approvedCorrections'));
+        return view('detail', compact('displayData', 'breakTimes', 'mode'));
     }
 
     public function showCorrectionDetail(Correction $correction)
