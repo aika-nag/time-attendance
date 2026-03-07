@@ -53,9 +53,10 @@ Route::prefix('admin')->group(function () {
         Route::get('/staff/list', [AdminController::class, 'showStaff']);
         Route::get('/attendance/staff/{user}',[AdminController::class, 'showAttendance'])->name('admin.attendance');
         Route::get('/stamp_correction_request/list', [CorrectionController::class, 'showByAdmin'])->name('admin.correction');
-        Route::get('/stamp_correction_request/approve/{correction?}', [AdminController::class, 'showCorrectionDetail'])->name('admin.request');
+        Route::get('/stamp_correction_request/approve/{correction?}', [CorrectionController::class, 'showCorrectionDetail'])->name('admin.request');
         Route::post('/stamp_correction_request/approve/{correction}', [AdminController::class, 'approve'])->name('admin.approve');
         Route::get('/attendance/{attendance?}', [AdminController::class, 'detail'])->name('admin.detail');
         Route::post('/attendance/correction_requested', [CorrectionController::class, 'storeByAdmin']);
+        Route::get('/csv/export', [AdminController::class, 'exportCSV']);
     });
 });

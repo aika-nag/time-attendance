@@ -18,5 +18,10 @@
         'date' => $nextMonth]) }}" class="next-link">翌月</a>
     </div>
     @include('components.attendance-table')
+    <form action="/admin/csv/export" class="button-area">
+        <button class="edit-button">CSV出力</button>
+        <input type="hidden" name="user" value="{{ $user->id }}">
+        <input type="hidden" name="day" value="{{ $targetDate }}" >
+    </form>
 </main>
 @endsection

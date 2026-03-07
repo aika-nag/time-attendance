@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Response;
 use Illuminate\Pipeline\Pipeline;
 use App\Actions\Admin\AttemptToAuthenticate;
 use Laravel\Fortify\Actions\PrepareAuthenticatedSession;
@@ -14,10 +15,7 @@ use App\Responses\AdminLogoutResponse;
 use App\Http\Requests\LoginRequest;
 use App\Models\User;
 use App\Models\Attendance;
-use App\Models\BreakTime;
 use App\Models\Correction;
-use App\Models\CorrectionBreak;
-use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 class AdminController extends Controller
 {
@@ -131,23 +129,6 @@ class AdminController extends Controller
         return view('detail', compact('displayData', 'breakTimes', 'mode'));
     }
 
-    public function showCorrectionDetail(Correction $correction)
-    {
-        $breakTimes = $correction->correctionBreaks;
-        if($correction->status == 1){
-            $mode = "approve";
-        } elseif($correction->status == 2){
-            $mode = "approved";
-        }
-        $data = [
-            'displayData' => $correction,
-            'breakTimes' => $breakTimes,
-            'mode' => $mode,
-        ];
-
-        return view('detail', $data);
-    }
-
     public function approve(Correction $correction)
     {
         $breakTimes = $correction->CorrectionBreaks;
@@ -182,5 +163,38 @@ class AdminController extends Controller
         ]);
 
         return redirect()->route('admin.request', $correction->id);
+    }
+
+    public function exportCSV(Request $request)
+    {
+        $user = User::find($request->user);
+        $year = Carbon::parse($request->day)->year;
+        $month = Carbon::parse($request->day)->month;
+        $attendances = $user->attendances()->whereYear('date', $year)->whereMonth('date', $month)->get();
+        $stream = fopen('php://temp', 'w');
+        $csvHeader = array('名前', '日付', '出勤', '退勤', '休憩', '合計');
+        fputcsv($stream, $csvHeader);
+        foreach($attendances as $attendance)
+            {
+                $row = array(
+                    '名前' =>  $attendance->user->name,
+                    '日付' => $attendance->date->format('Y-m-d'),
+                    '出勤' => $attendance->start_time->format('H:i'),
+                    '退勤' => $attendance->end_time->format('H:i'),
+                    '休憩' => $attendance->total_break_time,
+                    '合計' => $attendance->total_work_time
+                );
+                fputcsv($stream, $row);
+            }
+        rewind($stream);
+        $csv = stream_get_contents($stream);
+        $csv = mb_convert_encoding($csv, 'sjis-win', 'UTF-8');
+        fclose($stream);
+        $headers = array(
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => 'attachment; filename=attendance.csv'
+        );
+
+        return Response::make($csv, 200, $headers);
     }
 }

@@ -4,9 +4,7 @@ namespace App\Http\Controllers;
 
 use Carbon\Carbon;
 use App\Models\Correction;
-use App\Models\CorrectionBreak;
 use App\Models\Attendance;
-use Illuminate\Http\Request;
 use App\Http\Requests\CorrectionRequest;
 use Illuminate\Support\Facades\Auth;
 
@@ -31,7 +29,6 @@ class CorrectionController extends Controller
     public function store(CorrectionRequest $request)
     {
         $attendance = Attendance::where('user_id', Auth::id())->where('date', $request->date)->first();
-
         $correction = new Correction();
         $correction->user_id = Auth::id();
         if($attendance){
@@ -93,5 +90,22 @@ class CorrectionController extends Controller
         } else {
             return redirect()->route('admin.detail', $correction->attendance_id);
         }
+    }
+
+    public function showCorrectionDetail(Correction $correction)
+    {
+        $breakTimes = $correction->correctionBreaks;
+        if($correction->status == 1){
+            $mode = "approve";
+        } elseif($correction->status == 2){
+            $mode = "approved";
+        }
+        $data = [
+            'displayData' => $correction,
+            'breakTimes' => $breakTimes,
+            'mode' => $mode,
+        ];
+
+        return view('detail', $data);
     }
 }

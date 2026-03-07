@@ -97,6 +97,26 @@
     color: #000000;
 }
 
+.button-area {
+    width: 59.5%;
+    margin: 56px auto 50px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.edit-button {
+    background-color: #000000;
+    border: 1px solid #000000;
+    border-radius: 5px;
+    color: #ffffff;
+    width: 130px;
+    height: 50px;
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 50px;
+}
+
+
 @media (max-width: 1299px) {
     .page-title {
         width: 80%;
@@ -107,6 +127,10 @@
     }
 
     .attendance-table {
+        width: 80%;
+    }
+
+    .button-area {
         width: 80%;
     }
 

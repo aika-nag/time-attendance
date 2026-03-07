@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\BreakTime;
 use App\Models\Attendance;
-use Carbon\Carbon;
 
 class BreakTimeController extends Controller
 {
