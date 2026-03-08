@@ -10,7 +10,6 @@ class BreakTime extends Model
     use HasFactory;
 
     protected $fillable = [
-        'user_id',
         'attendance_id',
         'start_time',
         'end_time',
@@ -20,11 +19,6 @@ class BreakTime extends Model
         'start_time' => 'datetime:H:i',
         'end_time' => 'datetime:H:i'
     ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
 
     public function attendance()
     {

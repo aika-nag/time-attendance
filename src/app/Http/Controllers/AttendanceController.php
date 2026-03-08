@@ -18,8 +18,7 @@ class AttendanceController extends Controller
             ->where('date', today())
             ->first();
         if($attendance){
-            $breakTimeNow = BreakTime::where('user_id', Auth::id())
-                ->where('attendance_id', $attendance->id)
+            $breakTimeNow = $attendance->breakTimes
                 ->where('end_time', null)
                 ->first();
             return view('index', compact('attendance', 'breakTimeNow'));

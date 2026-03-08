@@ -12,7 +12,6 @@ class BreakTimeController extends Controller
     {
         $attendance = Attendance::where('user_id', Auth::id())->whereDate('date', today())->whereNull('end_time')->first();
         $breakTime = new BreakTime();
-        $breakTime->user_id = Auth::id();
         $breakTime->attendance_id = $attendance->id;
         $breakTime->start_time = now()->format('H:i:00');
         $breakTime->save();

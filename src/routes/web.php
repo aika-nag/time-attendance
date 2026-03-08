@@ -25,7 +25,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::post('/attendance/finish', [AttendanceController::class, 'endDay']);
     Route::post('/attendance/break-begin', [BreakTimeController::class, 'store']);
     Route::post('/attendance/break-finish', [BreakTimeController::class, 'endBreakTime']);
-    Route::get('/attendance/list', [AttendanceController::class, 'show']);
+    Route::get('/attendance/list', [AttendanceController::class, 'show'])->name('attendance');
     Route::get('/stamp_correction_request/list', [CorrectionController::class, 'show'])->name('correction');
     Route::get('/attendance/detail/{attendance?}', [AttendanceController::class, 'detail'])->name('detail');
     Route::post('/attendance/detail/correction_requested', [CorrectionController::class, 'store']);
