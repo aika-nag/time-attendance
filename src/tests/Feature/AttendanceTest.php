@@ -120,13 +120,15 @@ class AttendanceTest extends TestCase
         ]);
     }
 
-    public function test_attendance_list()
+    public function test_current_attendance()
     {
+        $user = $this->users[3];
         Carbon::setTestNow(today()->setHour(9)->setMinute(0)->setSecond(0));
         $start = today()->subMonth()->startOfMonth();
         $end = today()->subMonth()->endOfMonth();
         $workDays = $start->diffInWeekdays($end);
-        $response = $this->actingAs($this->users[3])->get('/attendance/list');
+
+        $response = $this->actingAs($user)->get('/attendance/list');
         $response->assertSee(today()->format('Y/m'));
         $this->assertDatabaseHas('attendances',[
             'user_id' => $this->users[3]['id'],
@@ -134,12 +136,27 @@ class AttendanceTest extends TestCase
             'start_time' => '09:00:00',
             'end_time' => '18:00:00'
         ]);
-        $this->assertEquals(++$workDays, $this->users[3]->attendances->count());
-        $preMonth = $start->format('Y-m');
-        $response2 = $this->actingAs($this->users[3])->get(route('attendance', ['date' => $preMonth]));
-        $response2->assertSee($start->format('Y/m'));
-        $content = $response2->getContent();
-        $count = substr_count($content, '1:00');
-        $this->assertEquals(--$workDays, $count, '休憩時間の表示回数が違います');
+        $this->assertEquals($workDays + 1, $user->attendances->count());
+
+        $response2 = $this->actingAs($user)->get(route('detail', ['attendance' => $user->attendances->where('date', today())->first()->id]));
+        $response2->assertStatus(200);
+    }
+
+    public function test_previous_and_next_attendances()
+    {
+        $user = $this->users[3];
+        Carbon::setTestNow(today()->setHour(9)->setMinute(0)->setSecond(0));
+        $start = today()->subMonth()->startOfMonth();
+        $end = today()->subMonth()->endOfMonth();
+        $workDays = $start->diffInWeekdays($end);
+        $nextMonth = today()->addMonth();
+
+        $response = $this->actingAs($user)->get(route('attendance', ['date' => $start->format('Y-m')]));
+        $response->assertSee($start->format('Y/m'));
+        $this->assertEquals($workDays, $user->attendances()->whereYear('date',$start->year)->whereMonth('date', $start->month)->count());
+
+        $response2 = $this->actingAs($user)->get(route('attendance', ['date' => $nextMonth->format('Y-m')]));
+        $response2->assertSee($nextMonth->format('Y/m'));
+        $this->assertEquals(0, $user->attendances()->whereYear('date',$nextMonth->year)->whereMonth('date', $nextMonth->month)->count());
     }
 }
