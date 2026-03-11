@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use Database\Seeders\DatabaseSeeder;
 use App\Models\User;
+use App\Models\Admin;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -19,6 +20,7 @@ class DetailAttendanceTest extends TestCase
     protected function setUp(): void
     {
         parent::setUp();
+        Carbon::setTestNow(today()->setHour(9)->setMinute(0)->setSecond(0));
         $this->seed(DatabaseSeeder::class);
         $this->users = User::orderBy('id')->get();
     }
@@ -26,17 +28,34 @@ class DetailAttendanceTest extends TestCase
     public function test_match_attendance_data()
     {
         $user = $this->users[3];
-        Carbon::setTestNow(today()->setHour(9)->setMinute(0)->setSecond(0));
+
         $response = $this->actingAs($user)->get(route('detail', ['attendance' => $user->attendances()->where('date', today())->first()->id]));
 
-        $response->assertSee($user->name);
-        $response->assertSee(today()->format('Y年'));
-        $response->assertSee(today()->format('n月j日'));
-        $response->assertSee(today()->format('09:00'));
-        $response->assertSee(today()->format('18:00'));
-        $response->assertSee(today()->format('12:00'));
-        $response->assertSee(today()->format('12:30'));
-        $response->assertSee(today()->format('15:00'));
-        $response->assertSee(today()->format('15:30'));
+        $response->assertSeeInOrder([
+            $user->name,
+            today()->format('Y年'),
+            today()->format('n月j日'),
+            '09:00',
+            '18:00',
+            '12:00',
+            '12:30',
+            '15:00',
+            '15:30'
+        ]);
+    }
+
+    public function test_match_attendance_admin()
+    {
+        $admin = Admin::first();
+        $attendance = $this->users[1]->attendances()->where('date', today())->first();
+        $response = $this->actingAs($admin, 'admin')->get(route('admin.detail',[
+            'attendance' => $attendance->id
+        ]));
+        $response->assertSeeInOrder([
+            $attendance->user->name,
+            today()->format('Y年'),
+            today()->format('n月j日'),
+            '09:00'
+        ]);
     }
 }

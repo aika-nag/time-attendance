@@ -7,6 +7,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Notification;
+use Illuminate\Support\Facades\URL;
 use App\Models\User;
 use Tests\TestCase;
 
@@ -35,7 +36,7 @@ class VerifyEmailTest extends TestCase
         );
     }
 
-    public function test_redirect_verify_page()
+    public function test_redirect_and_finish_verify()
     {
         Notification::fake();
         Notification::assertNothingSent();
@@ -52,10 +53,19 @@ class VerifyEmailTest extends TestCase
 
         $verifyResponse = $this->actingAs($user)->get('/email/verify');
         $verifyResponse->assertSee('認証はこちらから');
-        $verifyResponse->assertSee('http://localhost:8025');
 
-        $linkResponse = $this->actingAs($user)->get('http://localhost:8025');
-        $linkResponse->assertSee('メールアドレスの確認');
+        $verificationUrl = URL::temporarySignedRoute(
+            'verification.verify',
+            now()->addMinutes(60),
+            [
+                'id' => $user->id,
+                'hash' => sha1($user->email),
+            ]
+        );
+
+        $linkResponse = $this->actingAs($user)->get($verificationUrl);
+        $linkResponse->assertRedirect('/');
+        $this->assertNotNull($user->fresh()->email_verified_at);
 
     }
 }

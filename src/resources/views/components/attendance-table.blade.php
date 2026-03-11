@@ -20,7 +20,8 @@
         <td>{{ $attendance?->total_work_time }}</td>
         @auth('admin')
         @if($attendance)
-        <td><a href="/admin/attendance/{{ $attendance?->id }}" class="detail-link">詳細</a></td>
+        <td><a href="{{ route('admin.detail',[
+        'attendance' => $attendance->id]) }}" class="detail-link">詳細</a></td>
         @else
         <td><a href="{{ route('admin.detail', [
                 'date' => $day->format('Y-m-d'),

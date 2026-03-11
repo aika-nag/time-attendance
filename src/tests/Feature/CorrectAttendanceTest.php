@@ -7,7 +7,8 @@ use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;use Carbon\Carbon;
+use Tests\TestCase;
+use Carbon\Carbon;
 
 class CorrectAttendanceTest extends TestCase
 {
@@ -111,6 +112,11 @@ class CorrectAttendanceTest extends TestCase
             'reason' =>'休憩時間を変更しました'
         ]);
 
-        $response->assertRedirect(route('detail', ['correction' => $user->attendances()->where('date', today())->corrections->first()->id]));
+        $response->assertRedirect(route('detail', ['attendance' => $user->attendances()->where('date', today())->first()->id]));
+        $this->assertDatabaseHas('corrections',[
+            'user_id' => $user->id,
+            'attendance_id' => $user->attendances()->where('date', today())->first()->id,
+            'status' => 1
+        ]);
     }
 }

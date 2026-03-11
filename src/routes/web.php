@@ -48,7 +48,7 @@ Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'create'])->name('admin.login');
     Route::post('/login', [AdminController::class, 'store']);
     Route::middleware('auth:admin')->group(function () {
-        Route::get('/attendance/list', [AdminController::class, 'index']);
+        Route::get('/attendance/list', [AdminController::class, 'index'])->name('admin.index');
         Route::post('/logout', [AdminController::class, 'destroy'])->name('admin.logout');
         Route::get('/staff/list', [AdminController::class, 'showStaff']);
         Route::get('/attendance/staff/{user}',[AdminController::class, 'showAttendance'])->name('admin.attendance');
