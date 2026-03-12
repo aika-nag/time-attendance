@@ -18,10 +18,8 @@ class UserRegisterTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('name');
-
         $errors = session('errors');
         $this->assertEquals('お名前を入力してください', $errors->first('name'));
     }
@@ -34,10 +32,8 @@ class UserRegisterTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('email');
-
         $errors = session('errors');
         $this->assertEquals('メールアドレスを入力してください', $errors->first('email'));
     }
@@ -50,10 +46,8 @@ class UserRegisterTest extends TestCase
             'password' => '1234567',
             'password_confirmation' => '1234567',
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('password');
-
         $errors = session('errors');
         $this->assertEquals('パスワードは8文字以上で入力してください', $errors->first('password'));
     }
@@ -66,10 +60,8 @@ class UserRegisterTest extends TestCase
             'password' => '12345678',
             'password_confirmation' => 'password',
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('password');
-
         $errors = session('errors');
         $this->assertEquals('パスワードと一致しません', $errors->first('password'));
     }
@@ -82,10 +74,8 @@ class UserRegisterTest extends TestCase
             'password' => '',
             'password_confirmation' => 'password',
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('password');
-
         $errors = session('errors');
         $this->assertEquals('パスワードを入力してください', $errors->first('password'));
     }
@@ -98,9 +88,7 @@ class UserRegisterTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
-
         $response->assertRedirect('/');
-
         $this->assertDatabaseHas(User::class, [
             'name' => 'テストユーザ',
             'email' => 'test@example.com',

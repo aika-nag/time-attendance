@@ -64,7 +64,6 @@ class Attendance extends Model
         $minutes -= $this->total_break_minutes;
 
         return $minutes;
-
     }
 
     public function getTotalWorkTimeAttribute()

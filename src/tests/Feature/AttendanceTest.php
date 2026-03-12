@@ -5,9 +5,6 @@ namespace Tests\Feature;
 use Database\Seeders\DatabaseSeeder;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Dflydev\DotAccessData\Data;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 
@@ -36,13 +33,10 @@ class AttendanceTest extends TestCase
     {
         $response1 = $this->actingAs($this->users[0])->get('/');
         $response1->assertSee('勤務外');
-
         $response2 = $this->actingAs($this->users[1])->get('/');
         $response2->assertSee('出勤中');
-
         $response3 = $this->actingAs($this->users[2])->get('/');
         $response3->assertSee('休憩中');
-
         $response4 = $this->actingAs($this->users[3])->get('/');
         $response4->assertSee('退勤済');
     }
@@ -52,10 +46,8 @@ class AttendanceTest extends TestCase
         Carbon::setTestNow(today()->setHour(9)->setMinute(0)->setSecond(0));
         $response1 = $this->actingAs($this->users[0])->followingRedirects()->post('/attendance/begin');
         $response1->assertSee('出勤中');
-
         $response2 = $this->actingAs($this->users[3])->get('/');
         $response2->assertDontSee('/attendance/begin');
-
         $this->actingAs($this->users[4])->post('/attendance/begin');
         $response3 = $this->actingAs($this->users[4])->get('/attendance/list');
         $response3->assertSee('09:00');
@@ -66,21 +58,17 @@ class AttendanceTest extends TestCase
         Carbon::setTestNow(today()->setHour(9)->setMinute(0)->setSecond(0));
         $response = $this->actingAs($this->users[1])->get('/');
         $response->assertSee('/attendance/break-begin');
-
         Carbon::setTestNow(today()->setHour(11)->setMinute(0)->setSecond(0));
         $response2 = $this->actingAs($this->users[1])->followingRedirects()->post('/attendance/break-begin');
         $response2->assertSee('休憩中');
         $response2->assertSee('/attendance/break-finish');
-
         Carbon::setTestNow(today()->setHour(12)->setMinute(0)->setSecond(0));
         $response3 = $this->actingAs($this->users[1])->followingRedirects()->post('/attendance/break-finish');
         $response3->assertSee('/attendance/break-begin');
         $response3->assertSee('出勤中');
-
         Carbon::setTestNow(today()->setHour(15)->setMinute(30)->setSecond(0));
         $response4 = $this->actingAs($this->users[1])->followingRedirects()->post('/attendance/break-begin');
         $response4->assertSee('/attendance/break-finish');
-
         Carbon::setTestNow(today()->setHour(16)->setMinute(00)->setSecond(0));
         $this->actingAs($this->users[1])->post('/attendance/break-finish');
         $response5 = $this->actingAs($this->users[1])->get('/attendance/list');
@@ -102,7 +90,6 @@ class AttendanceTest extends TestCase
     {
         $response = $this->actingAs($this->users[1])->get('/');
         $response->assertSee('/attendance/finish');
-
         $response2 = $this->actingAs($this->users[1])->followingRedirects()->post('/attendance/finish');
         $response2->assertSee('退勤済');
 
@@ -110,7 +97,6 @@ class AttendanceTest extends TestCase
         $this->actingAs($this->users[0])->post('/attendance/begin');
         Carbon::setTestNow(today()->setHour(18)->setMinute(00)->setSecond(0));
         $this->actingAs($this->users[0])->post('/attendance/finish');
-
         $this->actingAs($this->users[0])->get('/attendance/list');
         $this->assertDatabaseHas('attendances',[
             'user_id' => $this->users[0]['id'],
@@ -137,7 +123,6 @@ class AttendanceTest extends TestCase
             'end_time' => '18:00:00'
         ]);
         $this->assertEquals($workDays + 1, $user->attendances->count());
-
         $response2 = $this->actingAs($user)->get(route('detail', ['attendance' => $user->attendances->where('date', today())->first()->id]));
         $response2->assertStatus(200);
     }
@@ -154,7 +139,6 @@ class AttendanceTest extends TestCase
         $response = $this->actingAs($user)->get(route('attendance', ['date' => $start->format('Y-m')]));
         $response->assertSee($start->format('Y/m'));
         $this->assertEquals($workDays, $user->attendances()->whereYear('date',$start->year)->whereMonth('date', $start->month)->count());
-
         $response2 = $this->actingAs($user)->get(route('attendance', ['date' => $nextMonth->format('Y-m')]));
         $response2->assertSee($nextMonth->format('Y/m'));
         $this->assertEquals(0, $user->attendances()->whereYear('date',$nextMonth->year)->whereMonth('date', $nextMonth->month)->count());

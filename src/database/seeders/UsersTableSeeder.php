@@ -15,7 +15,6 @@ class UsersTableSeeder extends Seeder
      */
     public function run()
     {
-        //
         $param = [
             'name' => '西　怜奈',
             'email' => 'reina.n@coachtech.com',

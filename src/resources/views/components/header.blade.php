@@ -16,7 +16,7 @@
                 <li><a href="/stamp_correction_request/list" class="page-link">申請</a></li>
                 <li>
                     <form action="/logout" method="post">
-                    @csrf
+                        @csrf
                         <button class="logout-button">ログアウト</button>
                     </form>
                 </li>

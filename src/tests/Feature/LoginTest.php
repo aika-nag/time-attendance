@@ -22,10 +22,8 @@ class LoginTest extends TestCase
             'email' => '',
             'password' => 'password'
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('email');
-
         $errors = session('errors');
         $this->assertEquals('メールアドレスを入力してください', $errors->first('email'));
     }
@@ -36,10 +34,8 @@ class LoginTest extends TestCase
             'email' => 'reina.n@coachtech.com',
             'password' => ''
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('password');
-
         $errors = session('errors');
         $this->assertEquals('パスワードを入力してください', $errors->first('password'));
     }
@@ -50,10 +46,8 @@ class LoginTest extends TestCase
             'email' => 'reina.m@coachtech.com',
             'password' => 'password'
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('email');
-
         $errors = session('errors');
         $this->assertEquals('ログイン情報が登録されていません', $errors->first('email'));
     }
@@ -64,10 +58,8 @@ class LoginTest extends TestCase
             'email' => '',
             'password' => 'adminuser'
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('email');
-
         $errors = session('errors');
         $this->assertEquals('メールアドレスを入力してください', $errors->first('email'));
     }
@@ -78,10 +70,8 @@ class LoginTest extends TestCase
             'email' => 'admin@example.com',
             'password' => ''
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('password');
-
         $errors = session('errors');
         $this->assertEquals('パスワードを入力してください', $errors->first('password'));
     }
@@ -92,10 +82,8 @@ class LoginTest extends TestCase
             'email' => 'admin@example.com',
             'password' => 'adminuser'
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors('email');
-
         $errors = session('errors');
         $this->assertEquals('ログイン情報が登録されていません', $errors->first('email'));
     }

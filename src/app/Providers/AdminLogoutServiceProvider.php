@@ -17,8 +17,7 @@ class AdminLogoutServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
-         $this->app->when(AdminController::class)
+        $this->app->when(AdminController::class)
             ->needs(LogoutResponse::class)
             ->give(AdminLogoutResponse::class);
     }

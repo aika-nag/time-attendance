@@ -16,7 +16,6 @@ class AdminLoginServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
         $this->app->when([AdminController::class, AttemptToAuthenticate::class])
             ->needs(StatefulGuard::class)
             ->give(function () {

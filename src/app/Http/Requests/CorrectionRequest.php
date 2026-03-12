@@ -24,7 +24,8 @@ class CorrectionRequest extends FormRequest
     public function rules()
     {
         return [
-            'end_time' => 'nullable|after:start_time',
+            'start_time' => 'required',
+            'end_time' => 'required|after:start_time',
             'break_start_time' => 'array',
             'break_start_time.*' => 'nullable|after:start_time|before:end_time',
             'break_end_time' => 'array',
@@ -36,6 +37,8 @@ class CorrectionRequest extends FormRequest
     public function messages()
     {
         return [
+            'start_time.required' => '出勤時間を入力してください',
+            'end_time.required' => '退勤時間を入力してください',
             'end_time.after' => '出勤時間もしくは退勤時間が不適切な値です',
             'break_start_time.*.after' => '休憩時間が不適切な値です',
             'break_start_time.*.before' => '休憩時間が不適切な値です',

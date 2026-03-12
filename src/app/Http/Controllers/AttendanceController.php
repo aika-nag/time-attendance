@@ -5,13 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\Attendance;
-use App\Models\BreakTime;
 use App\Models\Correction;
 use Carbon\Carbon;
 
 class AttendanceController extends Controller
 {
-    //
     public function index()
     {
         $attendance = Attendance::where('user_id', Auth::id())

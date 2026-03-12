@@ -30,7 +30,7 @@
         :breakTimes="$breakTimes"
         mode="approve" />
         <div class="button-area">
-        <button class="edit-button">承認</button>
+            <button class="edit-button">承認</button>
         </div>
     </form>
     @elseif($mode== "approved")
@@ -39,7 +39,7 @@
         :breakTimes="$breakTimes"
         mode="approved" />
         <div class="button-area">
-        <button class="edit-button" disabled>承認済み</button>
+            <button class="edit-button" disabled>承認済み</button>
         </div>
     @else
     @auth('admin')

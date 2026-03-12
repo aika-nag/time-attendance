@@ -41,7 +41,6 @@ class VerifyEmailNotification extends VerifyEmail
     public function toMail($notifiable)
     {
         $verificationUrl = $this->verificationUrl($notifiable);
-
         if (static::$toMailCallback) {
             return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
         }

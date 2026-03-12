@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Database\Seeders\DatabaseSeeder;
 use App\Models\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 
@@ -32,7 +30,6 @@ class CorrectAttendanceTest extends TestCase
             'start_time' => '18:30',
             'end_time' => '18:00'
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors([
             'end_time' => '出勤時間もしくは退勤時間が不適切な値です'
@@ -54,7 +51,6 @@ class CorrectAttendanceTest extends TestCase
                 '15:30'
             ]
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors([
             'break_start_time.0' => '休憩時間が不適切な値です'
@@ -76,7 +72,6 @@ class CorrectAttendanceTest extends TestCase
                 '18:30'
             ]
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors([
             'break_end_time.1' => '休憩時間もしくは退勤時間が不適切な値です'
@@ -93,7 +88,6 @@ class CorrectAttendanceTest extends TestCase
             'break_end_time' => ['13:00'],
             'reason' =>''
         ]);
-
         $response->assertStatus(302);
         $response->assertSessionHasErrors([
             'reason' => '備考を記入してください'
@@ -111,7 +105,6 @@ class CorrectAttendanceTest extends TestCase
             'break_end_time' => ['13:00'],
             'reason' =>'休憩時間を変更しました'
         ]);
-
         $response->assertRedirect(route('detail', ['attendance' => $user->attendances()->where('date', today())->first()->id]));
         $this->assertDatabaseHas('corrections',[
             'user_id' => $user->id,

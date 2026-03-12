@@ -139,7 +139,6 @@ class AdminController extends Controller
             $attendance->start_time = $correction->start_time;
             $attendance->end_time = $correction->end_time;
             $attendance->save();
-
             $correction->update([
                 'attendance_id' => $attendance->id
             ]);

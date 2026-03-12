@@ -5,8 +5,6 @@ namespace Tests\Feature;
 use Database\Seeders\DatabaseSeeder;
 use App\Models\User;
 use App\Models\Admin;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Carbon\Carbon;
@@ -28,9 +26,7 @@ class DetailAttendanceTest extends TestCase
     public function test_match_attendance_data()
     {
         $user = $this->users[3];
-
         $response = $this->actingAs($user)->get(route('detail', ['attendance' => $user->attendances()->where('date', today())->first()->id]));
-
         $response->assertSeeInOrder([
             $user->name,
             today()->format('Y年'),

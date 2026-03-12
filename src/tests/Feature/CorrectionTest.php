@@ -6,9 +6,7 @@ use Database\Seeders\DatabaseSeeder;
 use App\Models\User;
 use App\Models\Admin;
 use App\Models\Correction;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Carbon\Carbon;
 
@@ -90,7 +88,6 @@ class CorrectionTest extends TestCase
         $correction = Correction::find(1);
         $response->assertSee(route('detail', $correction->attendance_id));
         $response->assertSee('詳細');
-
         $response2 = $this->actingAs($this->users[3])->get(route('detail', $correction->attendance_id));
         $response2->assertStatus(200);
     }

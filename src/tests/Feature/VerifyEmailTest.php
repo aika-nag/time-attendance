@@ -4,8 +4,6 @@ namespace Tests\Feature;
 
 use App\Notifications\VerifyEmailNotification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\URL;
 use App\Models\User;
@@ -26,7 +24,6 @@ class VerifyEmailTest extends TestCase
             'password' => 'password',
             'password_confirmation' => 'password',
         ]);
-
         $user = User::where('email', 'test@example.com')->first();
         Notification::assertSentTo(
             [$user], VerifyEmailNotification::class
@@ -46,7 +43,6 @@ class VerifyEmailTest extends TestCase
             'email' => 'test@example.com',
             'password' => bcrypt('password'),
         ]);
-
         $this->assertNull($user->email_verified_at);
         $response = $this->actingAs($user)->get('/');
         $response->assertRedirect('/email/verify');
@@ -66,6 +62,5 @@ class VerifyEmailTest extends TestCase
         $linkResponse = $this->actingAs($user)->get($verificationUrl);
         $linkResponse->assertRedirect('/');
         $this->assertNotNull($user->fresh()->email_verified_at);
-
     }
 }
