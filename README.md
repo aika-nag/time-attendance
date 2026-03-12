@@ -25,7 +25,7 @@
    （DB項目の他に、MAIL_FROM_ADDRESSにもメールアドレスを設定してください）<br>
    例）MAIL_FROM_ADDRESS = "hello@example.com"
 4. php artisan key:generate
-5. php artisan migrate
+5. php artisan migrate:fresh
 6. php artisan db:seed
 <br>
 <br>
@@ -65,8 +65,8 @@
 本アプリでは、PHPUnitを用いた自動テストを導入しています。<br>
 機能ごとにテストケースを用意していますので、下記の方法でご利用ください。<br>
 1. docker-compose exec php bash
-1. php artisan test
-１つの機能ごとにテストを行いたい場合は　php artisan test tests/Feature/LoginTest.php  のようにファイル名を指定してください。
+1. php artisan test<br>
+１つの機能ごとにテストを行いたい場合は　php artisan test tests/Feature/LoginTest.php<br>のようにファイル名を指定してください。
 <br>
 <br>
 
