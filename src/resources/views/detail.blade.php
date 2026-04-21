@@ -56,7 +56,9 @@
             mode="edit" />
         <div class="message-area">
             @foreach($errors->all() as $error)
-            <li class="error">{{ $error }}</li>
+            <li class="error">
+                <ul>{{ $error }}</ul>
+            </li>
             @endforeach
         </div>
         <div class="button-area">
