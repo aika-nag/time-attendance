@@ -21,7 +21,7 @@
 .count-button {
     width: 221px;
     height: 77px;
-    background-color: #000000;
+    background-color: #2a83a2;
     border: none;
     color: #ffffff;
     font-size: 32px;
@@ -46,7 +46,7 @@
 
 .break {
     background-color: #ffffff;
-    color: #000000;
+    color: #2a83a2;
 }
 
 .well-done-message {

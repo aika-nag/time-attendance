@@ -1,6 +1,6 @@
 <header class="header admin">
     <div class="header-logo">
-        <a href="/admin/attendance/list"><img src="{{ asset('/image/logo.png') }}" alt="ロゴ" class="image"></a>
+        <a href="/admin/attendance/list"><img src="{{ asset('/image/name_logo.png') }}" alt="ロゴ" class="image"></a>
     </div>
     <div class="site-menu admin">
         <input id="toggle-menu-button" type="checkbox" hidden></input>

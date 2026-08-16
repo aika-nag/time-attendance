@@ -14,7 +14,7 @@
     height: 80px;
     width: 100vw;
     min-height: 80px;
-    background-color: #000000;
+    background-color: #2a83a2;
     color: #ffffff;
     font-size: 24px;
     font-weight: bold;;
@@ -55,7 +55,7 @@
 }
 
 .logout-button {
-    background-color: #000000;
+    background-color: #2a83a2;
     border: none;
     color: #ffffff;
     font-size: 24px;
